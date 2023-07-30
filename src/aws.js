@@ -2,8 +2,6 @@ const { EC2Client, RunInstancesCommand, waitUntilInstanceRunning, TerminateInsta
 const { core } = require('@actions/core');
 const { config } = require('./config');
 
-const client = new EC2Client({ region: config.input.ec2Region })
-
 // User data scripts are run as the root user
 function buildUserDataScript(githubRegistrationToken, label) {
     return [
@@ -19,6 +17,7 @@ function buildUserDataScript(githubRegistrationToken, label) {
 }
 
 async function startEc2Instance(label, githubRegistrationToken) {
+    const client = new EC2Client({ region: config.input.ec2Region })
     const userData = buildUserDataScript(githubRegistrationToken, label);
 
     const subnetId = config.input.subnetId;
@@ -53,6 +52,7 @@ async function startEc2Instance(label, githubRegistrationToken) {
 }
 
 async function terminateEc2Instance() {
+    const client = new EC2Client({ region: config.input.ec2Region })
     const terminateInstancesCommand = new TerminateInstancesCommand({
         InstanceIds: [config.input.ec2InstanceId],
     });
