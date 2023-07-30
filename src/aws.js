@@ -1,5 +1,5 @@
 const { EC2Client, RunInstancesCommand, waitUntilInstanceRunning, TerminateInstancesCommand } = require('@aws-sdk/client-ec2');
-const { error, warning, setFailed, info } = require('@actions/core');
+const { error, setFailed, info } = require('@actions/core');
 const { config } = require('./config');
 
 // User data scripts are run as the root user
@@ -42,10 +42,10 @@ async function startEc2Instance(label, githubRegistrationToken) {
             await waitUntilInstanceRunning({ client: client, maxWaitTime: 120 }, { InstanceIds: [ec2InstanceId] });
             info(`AWS EC2 instance ${ec2InstanceId} is started`);
             return ec2InstanceId;
-        } catch (error) {
-            warning('AWS EC2 instance starting error');
-            warning(error);
-            throw error;
+        } catch (err) {
+            error('AWS EC2 instance starting error');
+            error(err);
+            throw err;
         }
     }
     setFailed(`Failed to launch instance after trying in ${subnets.length} subnets.`);
@@ -61,9 +61,9 @@ async function terminateEc2Instance() {
         await client.send(terminateInstancesCommand);
         info(`AWS EC2 instance ${config.input.ec2InstanceId} is terminated`);
         return;
-    } catch (error) {
+    } catch (err) {
         error(`AWS EC2 instance ${config.input.ec2InstanceId} termination error`);
-        throw error;
+        throw err;
     }
 }
 

@@ -1,22 +1,22 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+const { getInput, error, setFailed } = require('@actions/core');
+const { context } = require('@actions/github');
 
 class Config {
     constructor() {
         this.input = {
-            mode: core.getInput('mode'),
-            githubToken: core.getInput('github-token'),
-            ec2Region: core.getInput('ec2-region'),
-            ec2ImageId: core.getInput('ec2-image-id'),
-            ec2InstanceType: core.getInput('ec2-instance-type'),
-            subnetId: core.getInput('subnet-id'),
-            securityGroupId: core.getInput('security-group-id'),
-            label: core.getInput('label'),
-            ec2InstanceId: core.getInput('ec2-instance-id'),
-            iamRoleName: core.getInput('iam-role-name'),
+            mode: getInput('mode'),
+            githubToken: getInput('github-token'),
+            ec2Region: getInput('ec2-region'),
+            ec2ImageId: getInput('ec2-image-id'),
+            ec2InstanceType: getInput('ec2-instance-type'),
+            subnetId: getInput('subnet-id'),
+            securityGroupId: getInput('security-group-id'),
+            label: getInput('label'),
+            ec2InstanceId: getInput('ec2-instance-id'),
+            iamRoleName: getInput('iam-role-name'),
         };
 
-        const tags = JSON.parse(core.getInput('aws-resource-tags'));
+        const tags = JSON.parse(getInput('aws-resource-tags'));
         this.tagSpecifications = null;
         if (tags.length > 0) {
             this.tagSpecifications = [{ ResourceType: 'instance', Tags: tags }, { ResourceType: 'volume', Tags: tags }];
@@ -26,8 +26,8 @@ class Config {
         // the environment variable GITHUB_REPOSITORY specified in "owner/repo" format and
         // provided by the GitHub Action on the runtime
         this.githubContext = {
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
         };
 
         //
@@ -62,7 +62,7 @@ class Config {
 
 try {
     module.exports = new Config();
-} catch (error) {
-    core.error(error);
-    core.setFailed(error.message);
+} catch (err) {
+    error(err);
+    setFailed(err.message);
 }
