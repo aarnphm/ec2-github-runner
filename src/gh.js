@@ -1,7 +1,7 @@
 const { info, warning } = require('@actions/core');
 const { getOctokit } = require('@actions/github');
 const _ = require('lodash');
-const { config } = require('./config');
+const config = require('./config');
 
 // use the unique label to find the runner
 // as we don't have the runner's id, it's not possible to get it in any other way

@@ -1,6 +1,6 @@
 const { EC2Client, RunInstancesCommand, waitUntilInstanceRunning, TerminateInstancesCommand } = require('@aws-sdk/client-ec2');
 const { error, setFailed, info } = require('@actions/core');
-const { config } = require('./config');
+const config = require('./config');
 
 // User data scripts are run as the root user
 function buildUserDataScript(githubRegistrationToken, label) {
