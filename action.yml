@@ -42,6 +42,11 @@ inputs:
     description: >-
       EC2 Instance Id of the created runner. The id is used to terminate the EC2 instance when the runner is not needed anymore. This input is required if you use the 'stop' mode.
     required: false
+  use-spot-instances:
+    description: >-
+      Whether to use spot instances for this given EC2 runner
+    default: false
+    required: false
   iam-role-name:
     description: >-
       IAM Role Name to attach to the created EC2 instance. This requires additional permissions on the AWS role used to launch instances.
