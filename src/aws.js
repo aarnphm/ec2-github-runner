@@ -57,8 +57,9 @@ async function startEc2Instance(label, githubRegistrationToken) {
       info(`AWS EC2 instance ${ec2InstanceId} is started`);
       return ec2InstanceId;
     } catch (err) {
-      warning("AWS EC2 instance starting error");
-      warning(err);
+      warning(
+        `Failed to start AWS EC2 instance due to the following error: ${err}`,
+      );
     }
   }
   setFailed(

@@ -1,4 +1,4 @@
-const { info, warning } = require("@actions/core");
+const { info, warning, error } = require("@actions/core");
 const { getOctokit } = require("@actions/github");
 const _ = require("lodash");
 const config = require("./config");
@@ -15,7 +15,8 @@ async function getRunner(label) {
     );
     const foundRunners = _.filter(runners, { labels: [{ name: label }] });
     return foundRunners.length > 0 ? foundRunners[0] : null;
-  } catch (error) {
+  } catch (err) {
+    error(`Error while retrieving GitHub self-hosted runners: ${err}`);
     return null;
   }
 }
